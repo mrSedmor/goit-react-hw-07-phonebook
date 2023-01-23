@@ -1,4 +1,8 @@
-@import-normalize; /* bring in normalize.css styles */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -12,4 +16,22 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+p,
+h1,
+h2 {
+  margin: 0;
+}
+
+button {
+  display: inline-block;
+  cursor: pointer;
+  font: inherit;
 }
