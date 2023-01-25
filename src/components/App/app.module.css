@@ -18,3 +18,10 @@
   text-align: center;
   margin-bottom: 16px;
 }
+
+.toast {
+  min-width: 320px;
+  max-width: min(600px, calc(100% - 30px));
+  width: max-content;
+  font-size: 24px;
+}

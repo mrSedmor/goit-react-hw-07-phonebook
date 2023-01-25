@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ContactFrom, Filter, ContactList } from 'components';
 import * as api from 'services/api';
 import css from './app.module.css';
@@ -44,7 +45,7 @@ export default class App extends Component {
     if (
       contacts.find(({ name }) => name.toLocaleUpperCase() === normalizedName)
     ) {
-      Notify.warning(`${contact.name} is already in contacts.`);
+      toast.error(`${contact.name} is already in contacts.`);
       return;
     }
 
@@ -80,6 +81,11 @@ export default class App extends Component {
         <ContactList
           contacts={filteredContacts}
           onDelete={this.handleDeleteContact}
+        />
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          className={css.toast}
         />
       </div>
     );
