@@ -20,3 +20,8 @@
   color: #b41919;
   font-size: 0.9em;
 }
+
+.controls {
+  display: flex;
+  gap: 12px;
+}

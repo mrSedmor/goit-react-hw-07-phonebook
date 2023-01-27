@@ -28,8 +28,9 @@ const schema = yup.object().shape({
 
 export default function ContactForm({ onAddContact }) {
   function handleAddContact(values, { resetForm }) {
-    onAddContact(values);
-    resetForm();
+    if (onAddContact(values)) {
+      resetForm();
+    }
   }
 
   return (
@@ -62,10 +63,14 @@ export default function ContactForm({ onAddContact }) {
           />
           <ErrorMessage name="number" component="p" className={css.error} />
         </label>
-
-        <button className={sharedCss.btn} type="submit">
-          Add contact
-        </button>
+        <div className={css.controls}>
+          <button className={sharedCss.btn} type="submit">
+            Add contact
+          </button>
+          <button className={sharedCss.btn} type="reset">
+            Reset form
+          </button>
+        </div>
       </Form>
     </Formik>
   );

@@ -40,19 +40,20 @@ export default class App extends Component {
 
   handleAddContact = contact => {
     const { contacts } = this.state;
-    const normalizedName = contact.name.toLocaleUpperCase();
+    const normalizedName = contact.name.toLocaleLowerCase();
 
     if (
-      contacts.find(({ name }) => name.toLocaleUpperCase() === normalizedName)
+      contacts.find(({ name }) => name.toLocaleLowerCase() === normalizedName)
     ) {
       toast.error(`${contact.name} is already in contacts.`);
-      return;
+      return false;
     }
 
     const id = nanoid(8);
     const updatedContacts = sortContacts([{ id, ...contact }, ...contacts]);
 
     this.setState({ contacts: updatedContacts });
+    return true;
   };
 
   handleDeleteContact = id => {
@@ -62,13 +63,22 @@ export default class App extends Component {
     });
   };
 
-  render() {
+  getFilteredContacts() {
     const { contacts, filter } = this.state;
+    if (filter === '') {
+      return contacts;
+    }
 
-    const normalizedFilter = filter.trim().toLocaleUpperCase();
-    const filteredContacts = contacts.filter(({ name }) =>
-      name.toLocaleUpperCase().includes(normalizedFilter)
+    const normalizedFilter = filter.toLocaleLowerCase();
+    return contacts.filter(({ name }) =>
+      name.toLocaleLowerCase().includes(normalizedFilter)
     );
+  }
+
+  render() {
+    const { filter } = this.state;
+
+    const filteredContacts = this.getFilteredContacts();
 
     return (
       <div className={css.container}>
@@ -82,6 +92,7 @@ export default class App extends Component {
           contacts={filteredContacts}
           onDelete={this.handleDeleteContact}
         />
+
         <ToastContainer
           position="top-center"
           autoClose={2000}
