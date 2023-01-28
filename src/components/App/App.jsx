@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,33 +13,26 @@ function sortContacts(contacts) {
   return contacts;
 }
 
-export default class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+export default function App() {
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
 
-  componentDidMount() {
+  useEffect(() => {
     let contacts = api.restore();
     if (contacts.length === 0) {
       contacts = sortContacts(initialContacts);
     }
-    this.setState({ contacts });
-  }
+    setContacts(contacts);
+  }, []);
 
-  componentDidUpdate(prevProps, { contacts: prevContacts }) {
-    const { contacts } = this.state;
-    if (contacts !== prevContacts) {
+  useEffect(
+    contacts => {
       api.store(contacts);
-    }
-  }
+    },
+    [contacts]
+  );
 
-  handleFilter = filter => {
-    this.setState({ filter });
-  };
-
-  handleAddContact = contact => {
-    const { contacts } = this.state;
+  function handleAddContact(contact) {
     const normalizedName = contact.name.toLocaleLowerCase();
 
     if (
@@ -52,19 +45,18 @@ export default class App extends Component {
     const id = nanoid(8);
     const updatedContacts = sortContacts([{ id, ...contact }, ...contacts]);
 
-    this.setState({ contacts: updatedContacts });
+    setContacts(updatedContacts);
     return true;
-  };
+  }
 
-  handleDeleteContact = id => {
-    this.setState(({ contacts }) => {
+  function handleDeleteContact(id) {
+    setContacts(contacts => {
       const updatedContacts = contacts.filter(contact => contact.id !== id);
-      return { contacts: updatedContacts };
+      return updatedContacts;
     });
-  };
+  }
 
-  getFilteredContacts() {
-    const { contacts, filter } = this.state;
+  function getFilteredContacts() {
     if (filter === '') {
       return contacts;
     }
@@ -75,30 +67,23 @@ export default class App extends Component {
     );
   }
 
-  render() {
-    const { filter } = this.state;
+  const filteredContacts = getFilteredContacts();
 
-    const filteredContacts = this.getFilteredContacts();
+  return (
+    <div className={css.container}>
+      <h1 className={css.title}>Phonebook</h1>
+      <ContactFrom onAddContact={handleAddContact} />
 
-    return (
-      <div className={css.container}>
-        <h1 className={css.title}>Phonebook</h1>
-        <ContactFrom onAddContact={this.handleAddContact} />
+      <h2 className={css.subtitle}>Contacts</h2>
+      <Filter value={filter} onChange={setFilter} />
 
-        <h2 className={css.subtitle}>Contacts</h2>
-        <Filter value={filter} onChange={this.handleFilter} />
+      <ContactList contacts={filteredContacts} onDelete={handleDeleteContact} />
 
-        <ContactList
-          contacts={filteredContacts}
-          onDelete={this.handleDeleteContact}
-        />
-
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          className={css.toast}
-        />
-      </div>
-    );
-  }
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        className={css.toast}
+      />
+    </div>
+  );
 }
