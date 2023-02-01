@@ -13,6 +13,17 @@ function sortContacts(contacts) {
   return contacts;
 }
 
+function getFilteredContacts(filter, contacts) {
+  if (filter === '') {
+    return contacts;
+  }
+
+  const normalizedFilter = filter.toLocaleLowerCase();
+  return contacts.filter(({ name }) =>
+    name.toLocaleLowerCase().includes(normalizedFilter)
+  );
+}
+
 export default function App() {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
@@ -56,18 +67,7 @@ export default function App() {
     });
   }
 
-  function getFilteredContacts() {
-    if (filter === '') {
-      return contacts;
-    }
-
-    const normalizedFilter = filter.toLocaleLowerCase();
-    return contacts.filter(({ name }) =>
-      name.toLocaleLowerCase().includes(normalizedFilter)
-    );
-  }
-
-  const filteredContacts = getFilteredContacts();
+  const filteredContacts = getFilteredContacts(filter, contacts);
 
   return (
     <div className={css.container}>
