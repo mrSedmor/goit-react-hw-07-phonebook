@@ -27,10 +27,8 @@ function getFilteredContacts(filter, contacts) {
 export default function App() {
   const [contacts, setContacts] = useState(() => {
     const contacts = api.restore();
-    if (contacts.length === 0) {
-      return sortContacts(initialContacts);
-    }
-    return contacts;
+
+    return contacts.length > 0 ? contacts : initialContacts;
   });
   const [filter, setFilter] = useState('');
 
