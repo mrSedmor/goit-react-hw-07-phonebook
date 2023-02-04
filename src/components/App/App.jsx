@@ -3,7 +3,9 @@ import { nanoid } from 'nanoid';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ContactFrom, Filter, ContactList } from 'components';
+// import useLocalStorage from 'hooks/useLocalStorage';
 import * as api from 'services/api';
+
 import css from './app.module.css';
 import initialContacts from 'data/contacts.json';
 
@@ -25,16 +27,19 @@ function getFilteredContacts(filter, contacts) {
 }
 
 export default function App() {
+  // Альтернативно можна використати кастомний хук useLocalStorage:
+  // const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
+
   const [contacts, setContacts] = useState(() => {
     const contacts = api.restore();
 
     return contacts.length > 0 ? contacts : initialContacts;
   });
-  const [filter, setFilter] = useState('');
-
   useEffect(() => {
     api.store(contacts);
   }, [contacts]);
+
+  const [filter, setFilter] = useState('');
 
   function handleAddContact(contact) {
     const normalizedName = contact.name.toLocaleLowerCase();
