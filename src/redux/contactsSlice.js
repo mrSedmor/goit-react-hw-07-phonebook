@@ -5,7 +5,7 @@ import insertIntoSortedContacts from 'services/insertIntoSortedContacts';
 
 const contactsInitialState = [];
 
-const contactsSlice = createSlice({
+export const contactsSlice = createSlice({
   name: 'contacts',
   initialState: contactsInitialState,
   reducers: {
