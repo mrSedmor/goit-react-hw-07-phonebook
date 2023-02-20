@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
-import { getInitialSortedData } from 'services/api';
+
 import insertIntoSortedContacts from 'services/insertIntoSortedContacts';
 
-const contactsInitialState = getInitialSortedData();
+const contactsInitialState = [];
 
 const contactsSlice = createSlice({
   name: 'contacts',
@@ -24,4 +24,5 @@ const contactsSlice = createSlice({
 });
 
 export const { addContact, deleteContact } = contactsSlice.actions;
+
 export const contactsReducer = contactsSlice.reducer;
