@@ -5,7 +5,7 @@ export default function App() {
   return (
     <div className={css.container}>
       <h1 className={css.title}>Phonebook</h1>
-      <ContactFrom />
+      <ContactFrom className={css.contactForm} />
 
       <h2 className={css.subtitle}>Contacts</h2>
       <Filter />

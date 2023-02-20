@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
@@ -30,7 +31,7 @@ const schema = yup.object().shape({
     .required('Phone number is required'),
 });
 
-export default function ContactForm() {
+export default function ContactForm({ className }) {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
 
@@ -55,7 +56,7 @@ export default function ContactForm() {
         validationSchema={schema}
         onSubmit={handleAddContact}
       >
-        <Form>
+        <Form className={className}>
           <label className={css.fieldWrapper}>
             <span className={css.label}>Name</span>
             <Field
@@ -97,3 +98,7 @@ export default function ContactForm() {
     </>
   );
 }
+
+ContactForm.propTypes = {
+  className: PropTypes.string,
+};
