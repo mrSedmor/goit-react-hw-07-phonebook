@@ -9,13 +9,16 @@ export default function Filter() {
   const dispatch = useDispatch();
   const filter = useSelector(getFilter);
 
-  const handleChange = useCallback(({ currentTarget: { value } }) => {
-    dispatch(setFilter(value));
-  }, []);
+  const handleChange = useCallback(
+    ({ currentTarget: { value } }) => {
+      dispatch(setFilter(value));
+    },
+    [dispatch]
+  );
 
   const handleClear = useCallback(() => {
     dispatch(setFilter(''));
-  }, []);
+  }, [dispatch]);
   return (
     <label className={css.field}>
       <span className={css.label}>Find contacts by name</span>
