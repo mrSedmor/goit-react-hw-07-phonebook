@@ -11,11 +11,11 @@ export default function Filter() {
 
   const handleChange = useCallback(({ currentTarget: { value } }) => {
     dispatch(setFilter(value));
-  });
+  }, []);
 
   const handleClear = useCallback(() => {
     dispatch(setFilter(''));
-  });
+  }, []);
   return (
     <label className={css.field}>
       <span className={css.label}>Find contacts by name</span>
