@@ -29,6 +29,7 @@ export default function Filter() {
           name="filter"
           onChange={handleChange}
           value={filter}
+          placeholder="&nbsp;"
         />
         <button type="button" className={css.iconButton} onClick={handleClear}>
           <FaBackspace />

@@ -32,4 +32,16 @@
   align-items: center;
   border: none;
   background: transparent;
+
+  opacity: 1;
+  visibility: visible;
+
+  transition-property: opacity visibility;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
+
+.input:placeholder-shown + .iconButton {
+  opacity: 0;
+  visibility: hidden;
 }
