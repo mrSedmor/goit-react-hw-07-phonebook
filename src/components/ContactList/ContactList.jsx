@@ -1,13 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from 'redux/contactsSlice';
-import { getFilteredContacts } from 'redux/selectors';
+import { getFilteredContacts, getContacts } from 'redux/selectors';
 
 import css from './contact-list.module.css';
 import sharedCss from 'shared.module.css';
 
 export default function ContactList() {
   const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
   const filteredContacts = useSelector(getFilteredContacts);
+
+  if (contacts.length === 0) {
+    return <p className={css.message}>Phonebook is empty</p>;
+  }
+
+  if (filteredContacts.length === 0) {
+    return <p className={css.message}>Nothing has been found</p>;
+  }
 
   return (
     <ul className={css.list}>
