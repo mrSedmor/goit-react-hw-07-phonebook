@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/contactsSlice';
+import { deleteContact } from 'redux/operations';
 import { getFilteredContacts, getContacts } from 'redux/selectors';
 
 import css from './contact-list.module.css';
@@ -20,10 +20,10 @@ export default function ContactList() {
 
   return (
     <ul className={css.list}>
-      {filteredContacts.map(({ id, name, number }) => (
+      {filteredContacts.map(({ id, name, phone }) => (
         <li key={id} className={css.item}>
           <span className={css.content}>
-            {name}: {number}
+            {name}: {phone}
           </span>
           <button
             className={sharedCss.btn}

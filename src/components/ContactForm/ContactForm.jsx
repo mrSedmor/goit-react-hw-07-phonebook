@@ -1,35 +1,15 @@
 import PropTypes from 'prop-types';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
+
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getContacts } from 'redux/selectors';
-import { addContact } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
 import css from './contact-form.module.css';
 import sharedCss from 'shared.module.css';
-
-const INITIAL_VALUES = {
-  name: '',
-  number: '',
-};
-
-const schema = yup.object().shape({
-  name: yup
-    .string()
-    .matches(
-      /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
-      "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-    )
-    .required('Name is required'),
-  number: yup
-    .string()
-    .matches(
-      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
-      'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
-    )
-    .required('Phone number is required'),
-});
+import schema from './validation-schema';
+import initialValues from './initial-values';
 
 export default function ContactForm({ className }) {
   const dispatch = useDispatch();
@@ -52,7 +32,7 @@ export default function ContactForm({ className }) {
   return (
     <>
       <Formik
-        initialValues={INITIAL_VALUES}
+        initialValues={initialValues}
         validationSchema={schema}
         onSubmit={handleAddContact}
       >
@@ -70,15 +50,15 @@ export default function ContactForm({ className }) {
           </label>
 
           <label className={css.fieldWrapper}>
-            <span className={css.label}>Number</span>
+            <span className={css.label}>Phone</span>
             <Field
               className={css.input}
               type="tel"
-              name="number"
+              name="phone"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               placeholder="459-12-56"
             />
-            <ErrorMessage name="number" component="p" className={css.error} />
+            <ErrorMessage name="phone" component="p" className={css.error} />
           </label>
           <div className={css.controls}>
             <button className={sharedCss.btn} type="submit">

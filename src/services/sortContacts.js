@@ -1,9 +1,7 @@
-import collator from './collator';
+import defaultCollator from './collator';
 
-const sortContacts = contacts => {
-  const copyContacts = [...contacts];
-  copyContacts.sort(({ name: a }, { name: b }) => collator(a, b));
-  return copyContacts;
+const sortContacts = (contacts, collator = defaultCollator) => {
+  contacts.sort(({ name: a }, { name: b }) => collator(a, b));
 };
 
 export default sortContacts;
