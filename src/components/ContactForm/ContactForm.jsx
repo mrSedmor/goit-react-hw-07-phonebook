@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/selectors';
 import { addContact } from 'redux/operations';
 import css from './contact-form.module.css';
 import sharedCss from 'shared.module.css';
@@ -13,7 +13,7 @@ import initialValues from './initial-values';
 
 export default function ContactForm({ className }) {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   function handleAddContact(contact, { resetForm }) {
     const normalizedName = contact.name.toLocaleLowerCase();

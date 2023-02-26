@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaBackspace } from 'react-icons/fa';
-import { getFilter } from 'redux/selectors';
+import { selectFilter } from 'redux/selectors';
 import { setFilter } from 'redux/filterSlice';
 import css from './filter.module.css';
 
 export default function Filter() {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
+  const filter = useSelector(selectFilter);
 
   const handleChange = useCallback(
     ({ currentTarget: { value } }) => {

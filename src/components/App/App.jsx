@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ContactFrom, Filter, ContactList } from 'components';
 import { fetchContacts } from 'redux/operations';
-import { getIsLoading, getError } from 'redux/selectors';
+import { selectIsLoading, selectError } from 'redux/selectors';
 import css from './app.module.css';
 
 export default function App() {
   const dispatch = useDispatch();
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   useEffect(() => {
     dispatch(fetchContacts());
