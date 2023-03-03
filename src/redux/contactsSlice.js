@@ -22,33 +22,79 @@ const handleRejected = (state, action) => {
 export const contactsSlice = createSlice({
   name: 'contacts',
   initialState: contactsInitialState,
-  extraReducers: {
-    [fetchContacts.pending]: handlePending,
-    [fetchContacts.fulfilled](state, action) {
-      state.isLoading = false;
-      state.error = null;
-      state.items = action.payload;
-      sortContacts(state.items);
-    },
-    [fetchContacts.rejected]: handleRejected,
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContacts.pending, handlePending)
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items = action.payload;
+        sortContacts(state.items);
+      })
+      .addCase(fetchContacts.rejected, handleRejected)
 
-    [addContact.pending]: handlePending,
-    [addContact.fulfilled](state, action) {
-      state.isLoading = false;
-      state.error = null;
-      insertIntoSortedContacts(state.items, action.payload);
-    },
-    [addContact.rejected]: handleRejected,
+      .addCase(addContact.pending, handlePending)
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        insertIntoSortedContacts(state.items, action.payload);
+      })
+      .addCase(addContact.rejected, handleRejected)
 
-    [deleteContact.pending]: handlePending,
-    [deleteContact.fulfilled](state, action) {
-      state.isLoading = false;
-      state.error = null;
-      const index = state.items.findIndex(({ id }) => id === action.payload.id);
-      state.items.splice(index, 1);
-    },
-    [deleteContact.rejected]: handleRejected,
+      .addCase(deleteContact.pending, handlePending)
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.items.findIndex(
+          ({ id }) => id === action.payload.id
+        );
+        state.items.splice(index, 1);
+      })
+      .addCase(deleteContact.rejected, handleRejected);
   },
 });
+
+// Нижче альтернативний варіант з addMatcher
+
+// export const contactsSlice = createSlice({
+//   name: 'contacts',
+//   initialState: contactsInitialState,
+//   extraReducers: builder => {
+//     builder
+//       .addCase(fetchContacts.fulfilled, (state, action) => {
+//         state.items = action.payload;
+//         sortContacts(state.items);
+//       })
+//       .addCase(addContact.fulfilled, (state, action) => {
+//         insertIntoSortedContacts(state.items, action.payload);
+//       })
+//       .addCase(deleteContact.fulfilled, (state, action) => {
+//         const index = state.items.findIndex(
+//           ({ id }) => id === action.payload.id
+//         );
+//         state.items.splice(index, 1);
+//       })
+//       .addMatcher(
+//         ({ type }) => type.startsWith('contacts/') && type.endsWith('/pending'),  //type.match(/^contacts\/.*\/pending$/),
+//         state => {
+//           state.isLoading = true;
+//         }
+//       )
+//       .addMatcher(
+//         ({ type }) => type.startsWith('contacts/') && type.endsWith('/fulfilled'), //type.match(/^contacts\/.*\/fulfilled$/),
+//         state => {
+//           state.isLoading = false;
+//           state.error = null;
+//         }
+//       )
+//       .addMatcher(
+//         ({ type }) => type.startsWith('contacts/') && type.endsWith('/rejected'), //type.match(/^contacts\/.*\/rejected$/),
+//         (state, action) => {
+//           state.isLoading = false;
+//           state.error = action.payload;
+//         }
+//       );
+//   },
+// });
 
 export const contactsReducer = contactsSlice.reducer;

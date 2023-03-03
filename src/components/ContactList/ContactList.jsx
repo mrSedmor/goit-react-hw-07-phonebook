@@ -1,38 +1,32 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/operations';
-import { selectFilteredContacts, selectContacts } from 'redux/selectors';
+import { fetchContacts, deleteContact } from 'redux/operations';
+import { selectFilteredContacts } from 'redux/selectors';
+import { selectIsLoading } from 'redux/selectors';
+import ContactItem from './ContactItem';
 
 import css from './contact-list.module.css';
-import sharedCss from 'shared.module.css';
 
 export default function ContactList() {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const isLoading = useSelector(selectIsLoading);
   const filteredContacts = useSelector(selectFilteredContacts);
 
-  if (contacts.length === 0) {
-    return <p className={css.message}>Phonebook is empty</p>;
-  }
-
-  if (filteredContacts.length === 0) {
-    return <p className={css.message}>Nothing has been found</p>;
-  }
-
   return (
-    <ul className={css.list}>
+    <ul className={isLoading ? `${css.list} ${css.disabled}` : css.list}>
       {filteredContacts.map(({ id, name, phone }) => (
-        <li key={id} className={css.item}>
-          <span className={css.content}>
-            {name}: {phone}
-          </span>
-          <button
-            className={sharedCss.btn}
-            type="button"
-            onClick={() => dispatch(deleteContact(id))}
-          >
-            Delete
-          </button>
-        </li>
+        <ContactItem
+          key={id}
+          id={id}
+          name={name}
+          phone={phone}
+          onDelete={() => dispatch(deleteContact(id))}
+        />
       ))}
     </ul>
   );
