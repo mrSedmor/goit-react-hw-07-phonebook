@@ -1,6 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { selectFilteredContacts, selectContacts } from 'redux/selectors';
+import {
+  selectFilteredContactsSize,
+  selectContactsSize,
+} from 'redux/selectors';
 import { selectIsLoading, selectError } from 'redux/selectors';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -16,20 +19,20 @@ export default function StatusInfo() {
     }
   }, [isLoading, error]);
 
-  const contacts = useSelector(selectContacts);
-  const filteredContacts = useSelector(selectFilteredContacts);
+  const contactsSize = useSelector(selectContactsSize);
+  const filteredContactsSize = useSelector(selectFilteredContactsSize);
 
   const message = useMemo(() => {
-    if (contacts.length === 0) {
+    if (contactsSize === 0) {
       return isLoading ? 'Fetching contacts...' : error || 'Phonebook is empty';
     }
 
-    if (filteredContacts.length === 0) {
+    if (filteredContactsSize === 0) {
       return 'Nothing has been found';
     }
 
     return '';
-  }, [contacts.length, filteredContacts.length, isLoading, error]);
+  }, [contactsSize, filteredContactsSize, isLoading, error]);
 
   return (
     <>
