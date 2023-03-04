@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-import { toast, ToastContainer } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import { selectContacts } from 'redux/selectors';
-import { addContact } from 'redux/operations';
+import { useAddContactMutation } from 'redux/contactsApi';
 import css from './contact-form.module.css';
 import sharedCss from 'shared.module.css';
 import schema from './validation-schema';
 import initialValues from './initial-values';
 
 export default function ContactForm({ className }) {
-  const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
+
+  const [addContact] = useAddContactMutation();
 
   function handleAddContact(contact, { resetForm }) {
     const normalizedName = contact.name.toLocaleLowerCase();
@@ -24,8 +25,15 @@ export default function ContactForm({ className }) {
       return;
     }
 
-    dispatch(addContact(contact));
-    resetForm();
+    addContact(contact)
+      .unwrap()
+      .then(() => {
+        toast.success('New contact has been added');
+        resetForm();
+      })
+      .catch(() => {
+        toast.error('Failed to add contact.');
+      });
   }
 
   return (
@@ -69,11 +77,6 @@ export default function ContactForm({ className }) {
           </div>
         </Form>
       </Formik>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        className={css.toast}
-      />
     </>
   );
 }

@@ -1,15 +1,35 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { contactsApi } from './contactsApi';
 
-export const selectContacts = state => state.contacts.items;
+const emptyArray = [];
+
+// NB! Якщо не буде підписників (useGetContactsQuery),
+// то запит контаків зроблено не буде
+export const selectContactsFromEndpoint =
+  contactsApi.endpoints.getContacts.select();
+
+export const selectContacts = createSelector(
+  [selectContactsFromEndpoint],
+  contacts => contacts.data ?? emptyArray
+);
 
 export const selectContactsSize = createSelector(
   [selectContacts],
   contacts => contacts.length
 );
 
-export const selectIsLoading = state => state.contacts.isLoading;
+export const selectIsLoading = createSelector(
+  [selectContactsFromEndpoint],
+  contacts => {
+    console.log(contacts);
+    return contacts.isLoading;
+  }
+);
 
-export const selectError = state => state.contacts.error;
+export const selectError = createSelector(
+  [selectContactsFromEndpoint],
+  contacts => contacts.error
+);
 
 export const selectFilter = state => state.filter;
 
